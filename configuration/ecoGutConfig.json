@@ -1,0 +1,35 @@
+{
+     "databases": {
+
+        "hg37BowtieDB": "../resources/hg37BowtieDB",
+        "kaijuRefSeq": "../resources/kaijuRefSeq",
+        "kaijuUHGG": "../resources/kaijuUHGG",
+        "kaijuCore":"../resources/kaijuCore",
+        "krakenUHGG": "../resources/krakenUHGG/"},
+
+        "rules_parameters": {
+
+            "fastqTrimming": {
+                "avgPhred": 30,
+                "readsLength": 80
+            },
+
+            "hostDecontamination": {
+                "bowtie2_mode": "--very-sensitive"
+            }
+        },
+        
+        "threads": {
+            "rawFastqQC": 4,
+             "trimmedFastqQC": 4,
+             "fastqTrimming": 4,
+             "hostDecontamination": 4,
+             "fastq2table": 4,
+             "kaijuUHGG": 8,
+             "kaijuRefSeq":8,
+             "kaijuCore":8,
+             "krakenUHGG": 8
+        }, 
+             
+        "samples": [ "SRR6468572" ]
+}
