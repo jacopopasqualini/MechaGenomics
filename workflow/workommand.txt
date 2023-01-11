@@ -1,0 +1,1 @@
+snakemake --snakefile ecogutPE_Class --cores 8 --use-conda --keep-going --configfile ../configuration/ecoGutConfig.json

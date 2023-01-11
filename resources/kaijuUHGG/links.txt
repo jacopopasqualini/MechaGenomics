@@ -1,0 +1,2 @@
+Ch_38_no_alts:
+https://genome-idx.s3.amazonaws.com/bt/GRCh38_noalt_as.zip

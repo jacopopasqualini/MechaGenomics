@@ -1,0 +1,15 @@
+import os
+
+include: "./rules/kraken_profiling.smk"
+include: "./rules/kaiju_profiling.smk"
+
+#configfile: "../configuration/ecoGutConfig.json"
+
+SAMPLES=config["samples"]
+PARAMS=config["rules_parameters"]
+THREADS=config["threads"]
+
+rule all:
+	input:
+		expand("../data/kaijuCorePFAM/{sample}.out.gz",sample=SAMPLES),
+		expand("../data/kaijuCorePFAM/{sample}.tsv",sample=SAMPLES)

@@ -1,23 +1,19 @@
-configfile: "../configuration/ecoGutConfig.json"
-
 import os
 
-DATA_DIR=config["data_directories"]
-SAMPLES=config["samples"]
+configfile: "../configuration/ecoGutConfig.json"
+
 PARAMS=config["rules_parameters"]
 THREADS=config["threads"]
 DATABASES=config["databases"]
 
 rule krakenUHGG:
 	input:
-		community_fastq=expand("{DECONTAM_DIR}/{sample}_decon.fastq.gz",DECONTAM_DIR=DATA_DIR["decontaminatedFastq"],sample=SAMPLES),
+		community_fastq="../data/decontaminatedFastq/{sample}_decon.fastq.gz"
 		
 	output:
-		kraken=expand("{KR_UHGG_OUT}/{sample}.out.gz",KR_UHGG_OUT=DATA_DIR["krakenUHGGOut"],sample=SAMPLES),
-		kraken_report=expand("{KR_UHGG_OUT}/{sample}_report.txt",KR_UHGG_OUT=DATA_DIR["krakenUHGGOut"],sample=SAMPLES)
+		kraken_out="../data/krakenUHGG/{sample}.out.gz",
+		kraken_report="../data/krakenUHGG/{sample}.report"
 	params:
-		sample=expand("{sample}",sample=SAMPLES),
-		OUT_DIR=DATA_DIR["krakenUHGGOut"],
 		uhgg=DATABASES["krakenUHGG"],
 		
 	conda: "../envs/metagenomics.yml"
@@ -26,8 +22,34 @@ rule krakenUHGG:
 	
 	message: ">>> Kraken UHGG Classification."
 
-	log: expand('{LOG_DIR}/{sample}-kraken-uhgg.log', LOG_DIR=os.path.join(DATA_DIR["krakenUHGGOut"],'log'), sample=SAMPLES)
+	log: 
+		"../data/krakenUHGG/log/{sample}-KrakenUHGG.log"
 	
 	shell:
-		""" kraken2 --gzip-compressed --db {params.uhgg} --output {params.OUT_DIR}/{params.sample}.out --report {output.kraken_report} {input.community_fastq} && """
-		""" gzip {params.OUT_DIR}/{params.sample}.out """
+		""" kraken2 --gzip-compressed --db {params.uhgg} --output ../data/krakenUHGG/{wildcards.sample}.out --report {output.kraken_report} {input.community_fastq} && """
+		""" gzip -c ../data/krakenUHGG/{wildcards.sample}.out > {output.kraken_out} &&
+		    rm ../data/krakenUHGG/{wildcards.sample}.out """
+
+rule krakenCoreUHGG:
+	input:
+		community_fastq="../data/decontaminatedFastq/{sample}_decon.fastq.gz"
+		
+	output:
+		kraken_out="../data/krakenCoreUHGG/{sample}.out.gz",
+		kraken_report="../data/krakenCoreUHGG/{sample}.report"
+	params:
+		uhgg=DATABASES["krakenCoreUHGG"],
+		
+	conda: "../envs/metagenomics.yml"
+	
+	threads: THREADS["krakenCoreUHGG"]
+	
+	message: ">>> Kraken CoreUHGG Classification."
+
+	log: 
+		"../data/krakenUHGG/log/{sample}-KrakenCoreUHGG.log"
+	
+	shell:
+		""" kraken2 --gzip-compressed --db {params.uhgg} --output ../data/krakenCoreUHGG/{wildcards.sample}.out --report {output.kraken_report} {input.community_fastq} && """
+		""" gzip -c ../data/krakenCoreUHGG/{wildcards.sample}.out > {output.kraken_out} &&
+		    rm ../data/krakenCoreUHGG/{wildcards.sample}.out """

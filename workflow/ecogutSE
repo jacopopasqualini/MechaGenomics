@@ -1,0 +1,27 @@
+import os
+
+include: "./rules/preprocessPE.smk"
+include: "./rules/quality_control.smk"
+include: "./rules/host_decontamination.smk"
+include: "./rules/kaiju_profiling.smk"
+
+configfile: "../configuration/ecoGutConfig.json"
+
+SAMPLES=config["samples"]
+PARAMS=config["rules_parameters"]
+THREADS=config["threads"]
+
+rule all:
+	input:
+		expand("../data/rawFastQC/{sample}_fastqc.html",sample=SAMPLES),
+		expand("../data/rawFastQC/{sample}_fastqc.zip",sample=SAMPLES),
+		expand("../data/fastpReport/{sample}_fastp.json",sample=SAMPLES),
+		expand("../data/fastpReport/{sample}_fastp.html",sample=SAMPLES),
+		expand("../data/trimmedFastq/{sample}_trimmed.fastq.gz",sample=SAMPLES),
+		expand("../data/decontaminatedFastq/{sample}_decon.fastq.gz",sample=SAMPLES),
+		expand("../data/decontaminatedFastq/log/{sample}_decontamination.log",sample=SAMPLES),
+		expand("../data/decontaminatedFastQC/{sample}_decon_fastqc.html",sample=SAMPLES),
+		expand("../data/decontaminatedFastQC/{sample}_decon_fastqc.zip",sample=SAMPLES),
+		expand("../data/decontaminatedTable/{sample}_decon_fx2tab.out",sample=SAMPLES),
+		expand("../data/kaijuUHGG/{sample}.out.gz",sample=SAMPLES),
+		expand("../data/kaijuUHGG/{sample}_uhgg.tsv",sample=SAMPLES)
