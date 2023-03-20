@@ -1,6 +1,6 @@
 import os
 
-configfile: "../configuration/ecoGutConfig_demo.json"
+configfile: "../configuration/ecoGutConfig.json"
 
 PARAMS=config["rules_parameters"]
 THREADS=config["threads"]
@@ -121,25 +121,25 @@ rule kaijuCoreUHGG:
 		""" gzip ../data/kaijuCoreUHGG/{wildcards.sample}.out && """
 		""" rm ../data/kaijuCoreUHGG/uc_{wildcards.sample}.out """
 
-rule MAGNET:
+rule Gutlas:
 	input:
 		fastqD="../data/decontaminatedFastq/{sample}_decon.fastq.gz"
 		
 	output:
-		CoreUHGG_out="../data/MAGNET_UHGG/CoreOut/{sample}_decon_CoreUHGG.out.gz",
-		CoreUHGG_tab="../data/MAGNET_UHGG/CoreAbundances/{sample}_decon_CoreUHGG.tsv",
-		OnFlyUHGG_out="../data/MAGNET_UHGG/OnFly/{sample}_decon_OF_UHGG.out.gz",
-		UHGG_net="../data/MAGNET_UHGG/{sample}_decon_magnet.csv"
+		CoreUHGG_out="../../../data/gutlas/CoreOut/{sample}_CoreUHGG.out.gz",
+		CoreUHGG_tab="../../../data/gutlas/CoreAbundances/{sample}.tsv",
+		OnFlyUHGG_out="../../../data/gutlas/OnFly/{sample}_OF_UHGG.out.gz",
+		UHGG_net="../../../data/gutlas/{sample}_gutlas.csv"
 
 	conda: "../envs/funred.yml"
 	
 	threads: 
-		config["threads"]["magnet"]
+		config["threads"]["gutlas"]
 	
 	message: 
-		">>> MAGNET: MAGs NETworks for taxonomy to function mapping in microbial communities."
+		">>> Gutlas: taxonomy-function networks UHGG MAGs."
 
-	log: "../data/magnet/log/{sample}-magnet.log"
+	log: "../data/kaijuCore/log/{sample}-gutlas.log"
 	
 	shell:
-		"""python3 scripts/magnet/magnet.py --sample {wildcards.sample}_decon  --out ../data/MGNET_UHGG""" 
+		""" python3 scripts/gutlas/gutlas.py gutlas.py --sample {sample}_decon  --out ../../../data""" 

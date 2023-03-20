@@ -1,0 +1,15 @@
+#####################
+### ignore
+workflow/tempFiles/*
+workflow/old/*
+workflow/noflowScripts/*
+workflow/scripts
+workflow/.snakemake/*
+workflow/workommand.txt
+resources/*
+configuration/*
+norflow/*
+data/*
+#####################
+### removals section
+workflow/workommand.txt

@@ -54,12 +54,12 @@ rule fastqTrimming:
 		"../data/trimmedFastq/log/{sample}-fastp.log"
 	shell:
 		""" fastp --in1 {input.fastq1} --in2 {input.fastq2} \
-		--length_required {params.reads_length} --average_qual {params.avg_phred} \
-		--merge --merged_out {output.fastqM} \
-		--out1  {output.fastq1P} --out2  {output.fastq2P} \
-		--unpaired1  {output.fastq1U} --unpaired2  {output.fastq2U} \
-		--json {output.fastpJson} \
-		--html {output.fastpHtml} """
+			--length_required {params.reads_length} --average_qual {params.avg_phred} \
+			--merge --merged_out {output.fastqM} \
+			--out1  {output.fastq1P} --out2  {output.fastq2P} \
+			--unpaired1  {output.fastq1U} --unpaired2  {output.fastq2U} \
+			--json {output.fastpJson} \
+			--html {output.fastpHtml} """
 
 
 rule cleanTrimming:
